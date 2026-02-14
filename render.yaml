@@ -1,0 +1,19 @@
+# render.yaml - Blueprint para despliegue automático en Render
+# Documentación: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: sistema-ventas
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_SUPABASE_URL
+        sync: false  # Configurar manualmente en Render
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false  # Configurar manualmente en Render

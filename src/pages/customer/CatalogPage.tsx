@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, Input, Select, Badge, Button } from '../../components/ui';
+import { Card, Input, Select, Badge } from '../../components/ui';
 import { productsService, categoriesService } from '../../services';
 import type { ProductWithCategory, Category } from '../../interfaces';
 

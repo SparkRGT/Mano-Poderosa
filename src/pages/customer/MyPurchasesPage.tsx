@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Table, Alert, Badge, Modal, Card, Button } from '../../components/ui';
+import { Table, Alert, Badge, Modal, Button } from '../../components/ui';
 import type { Column } from '../../components/ui';
 import { salesService } from '../../services';
 import { useAuth } from '../../context';

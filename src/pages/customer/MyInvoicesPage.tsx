@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Table, Alert, Modal, Card, Button } from '../../components/ui';
+import { Table, Alert, Modal, Button } from '../../components/ui';
 import type { Column } from '../../components/ui';
 import { invoicesService } from '../../services';
 import { useAuth } from '../../context';
