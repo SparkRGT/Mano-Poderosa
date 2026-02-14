@@ -11,10 +11,10 @@ export interface AlertProps {
 export function Alert({ children, variant = 'info', title, onClose }: AlertProps) {
   const variants = {
     info: {
-      container: 'bg-blue-50 border-blue-200',
-      icon: 'text-blue-400',
-      title: 'text-blue-800',
-      text: 'text-blue-700',
+      container: 'bg-sky-50 border-sky-200',
+      icon: 'text-sky-500',
+      title: 'text-sky-800',
+      text: 'text-sky-700',
     },
     success: {
       container: 'bg-green-50 border-green-200',

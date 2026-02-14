@@ -41,7 +41,7 @@ export function SearchBar({
     <div className={cn('relative', className)}>
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
         <svg
-          className="h-5 w-5 text-gray-400"
+          className="h-5 w-5 text-sky-400"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -67,7 +67,7 @@ export function SearchBar({
           className="absolute inset-y-0 right-0 pr-3 flex items-center"
         >
           <svg
-            className="h-5 w-5 text-gray-400 hover:text-gray-600"
+            className="h-5 w-5 text-sky-400 hover:text-sky-600"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

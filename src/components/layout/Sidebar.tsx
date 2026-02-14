@@ -38,7 +38,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Overlay móvil */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
+          className="fixed inset-0 bg-slate-400/30 z-20 lg:hidden"
           onClick={onClose}
         />
       )}
@@ -46,19 +46,19 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-30 flex flex-col bg-gray-900 text-white transition-all duration-300',
+          'fixed inset-y-0 left-0 z-30 flex flex-col bg-white text-slate-700 border-r border-sky-100 transition-all duration-300 shadow-sm',
           isCollapsed ? 'w-16' : 'w-64',
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-800">
+        <div className="flex items-center justify-between h-16 px-4 border-b border-sky-100">
           {!isCollapsed && (
-            <span className="text-xl font-bold">{APP_NAME}</span>
+            <span className="text-xl font-bold text-sky-700">{APP_NAME}</span>
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden lg:block p-1 rounded hover:bg-gray-800"
+            className="hidden lg:block p-1 rounded-lg text-slate-500 hover:bg-sky-50 hover:text-sky-600"
           >
             <svg
               className={cn('w-5 h-5 transition-transform', isCollapsed && 'rotate-180')}
@@ -74,7 +74,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               />
             </svg>
           </button>
-          <button onClick={onClose} className="lg:hidden p-1 rounded hover:bg-gray-800">
+          <button onClick={onClose} className="lg:hidden p-1 rounded-lg text-slate-500 hover:bg-sky-50">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -93,8 +93,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     cn(
                       'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors',
                       isActive
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                        ? 'bg-sky-100 text-sky-700 font-medium'
+                        : 'text-slate-600 hover:bg-sky-50 hover:text-sky-600'
                     )
                   }
                 >
@@ -107,24 +107,22 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </nav>
 
         {/* User info */}
-        <div className="border-t border-gray-800 p-4">
+        <div className="border-t border-sky-100 p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
-              <span className="text-sm font-medium">
-                {profile ? getInitials(profile.name) : '?'}
-              </span>
+            <div className="w-10 h-10 rounded-full bg-sky-500 flex items-center justify-center flex-shrink-0 text-white text-sm font-medium">
+              {profile ? getInitials(profile.name) : '?'}
             </div>
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{profile?.name}</p>
-                <p className="text-xs text-gray-400 truncate">{profile?.email}</p>
+                <p className="text-sm font-medium truncate text-slate-800">{profile?.name}</p>
+                <p className="text-xs text-slate-500 truncate">{profile?.email}</p>
               </div>
             )}
           </div>
           {!isCollapsed && (
             <button
               onClick={handleSignOut}
-              className="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+              className="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2 text-sm text-slate-600 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors"
             >
               <LogoutIcon className="w-4 h-4" />
               Cerrar sesión

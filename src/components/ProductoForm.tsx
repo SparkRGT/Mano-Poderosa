@@ -53,7 +53,7 @@ export default function ProductosForm() {
         placeholder="Stock"
         className="border p-2 w-full"
       />
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+      <button type="submit" className="bg-sky-500 text-white px-4 py-2 rounded hover:bg-sky-600">
         Guardar
       </button>
     </form>

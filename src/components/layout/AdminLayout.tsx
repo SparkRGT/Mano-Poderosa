@@ -9,7 +9,7 @@ export function AdminLayout() {
 
   return (
     <CartProvider>
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-sky-50/50">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         
         {/* Main content */}

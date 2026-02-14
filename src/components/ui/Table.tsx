@@ -27,11 +27,11 @@ export function Table<T>({
 }: TableProps<T>) {
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-lg border border-sky-100 overflow-hidden">
         <div className="animate-pulse p-4">
-          <div className="h-10 bg-gray-200 rounded mb-4"></div>
+          <div className="h-10 bg-sky-100 rounded mb-4"></div>
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-12 bg-gray-100 rounded mb-2"></div>
+            <div key={i} className="h-12 bg-sky-50 rounded mb-2"></div>
           ))}
         </div>
       </div>
@@ -40,9 +40,9 @@ export function Table<T>({
 
   if (data.length === 0) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+      <div className="bg-white rounded-lg border border-sky-100 p-8 text-center">
         <svg
-          className="mx-auto h-12 w-12 text-gray-400"
+          className="mx-auto h-12 w-12 text-sky-300"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -54,22 +54,22 @@ export function Table<T>({
             d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
           />
         </svg>
-        <p className="mt-2 text-sm text-gray-500">{emptyMessage}</p>
+        <p className="mt-2 text-sm text-slate-500">{emptyMessage}</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-lg border border-sky-100 overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-sky-100">
+          <thead className="bg-sky-50/70">
             <tr>
               {columns.map((column) => (
                 <th
                   key={String(column.key)}
                   className={cn(
-                    'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider',
+                    'px-6 py-3 text-left text-xs font-medium text-slate-600 uppercase tracking-wider',
                     column.className
                   )}
                 >
@@ -78,12 +78,12 @@ export function Table<T>({
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-sky-100">
             {data.map((item) => (
               <tr
                 key={keyExtractor(item)}
                 className={cn(
-                  'hover:bg-gray-50',
+                  'hover:bg-sky-50/50',
                   onRowClick && 'cursor-pointer'
                 )}
                 onClick={() => onRowClick?.(item)}
@@ -92,7 +92,7 @@ export function Table<T>({
                   <td
                     key={String(column.key)}
                     className={cn(
-                      'px-6 py-4 whitespace-nowrap text-sm text-gray-900',
+                      'px-6 py-4 whitespace-nowrap text-sm text-slate-800',
                       column.className
                     )}
                   >

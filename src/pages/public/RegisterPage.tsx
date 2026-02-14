@@ -24,13 +24,13 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-sky-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="bg-white rounded-xl shadow-md border border-sky-100 p-8">
           {/* Logo */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">{APP_NAME}</h1>
-            <p className="mt-2 text-sm text-gray-600">Crea tu cuenta</p>
+            <h1 className="text-3xl font-bold text-sky-700">{APP_NAME}</h1>
+            <p className="mt-2 text-sm text-slate-600">Crea tu cuenta</p>
           </div>
 
           {/* Form */}

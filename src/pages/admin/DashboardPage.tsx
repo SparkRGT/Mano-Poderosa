@@ -39,7 +39,7 @@ export function DashboardPage() {
       value: stats?.totalSalesToday || 0,
       subvalue: formatCurrency(stats?.totalAmountToday || 0),
       icon: ShoppingCartIcon,
-      color: 'bg-blue-500',
+      color: 'bg-sky-500',
       link: ROUTES.ADMIN_SALES,
     },
     {
@@ -70,7 +70,7 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+      <h1 className="text-2xl font-bold text-slate-800">Dashboard</h1>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -82,13 +82,13 @@ export function DashboardPage() {
                   <stat.icon className="w-6 h-6 text-white" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">{stat.title}</p>
+                  <p className="text-sm font-medium text-slate-500">{stat.title}</p>
                   {isLoading ? (
-                    <div className="h-8 w-16 bg-gray-200 animate-pulse rounded mt-1" />
+                    <div className="h-8 w-16 bg-sky-100 animate-pulse rounded mt-1" />
                   ) : (
                     <>
-                      <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
-                      <p className="text-sm text-gray-500">{stat.subvalue}</p>
+                      <p className="text-2xl font-semibold text-slate-800">{stat.value}</p>
+                      <p className="text-sm text-slate-500">{stat.subvalue}</p>
                     </>
                   )}
                 </div>
@@ -100,35 +100,35 @@ export function DashboardPage() {
 
       {/* Quick Actions */}
       <Card>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Acciones Rápidas</h2>
+        <h2 className="text-lg font-semibold text-slate-800 mb-4">Acciones Rápidas</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Link
             to={ROUTES.ADMIN_NEW_SALE}
-            className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex flex-col items-center p-4 border border-sky-100 rounded-lg hover:bg-sky-50 transition-colors"
           >
-            <PlusIcon className="w-8 h-8 text-blue-600" />
-            <span className="mt-2 text-sm font-medium text-gray-900">Nueva Venta</span>
+            <PlusIcon className="w-8 h-8 text-sky-600" />
+            <span className="mt-2 text-sm font-medium text-slate-800">Nueva Venta</span>
           </Link>
           <Link
             to={ROUTES.ADMIN_PRODUCTS}
-            className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex flex-col items-center p-4 border border-sky-100 rounded-lg hover:bg-sky-50 transition-colors"
           >
             <BoxIcon className="w-8 h-8 text-green-600" />
-            <span className="mt-2 text-sm font-medium text-gray-900">Productos</span>
+            <span className="mt-2 text-sm font-medium text-slate-800">Productos</span>
           </Link>
           <Link
             to={ROUTES.ADMIN_CUSTOMERS}
-            className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex flex-col items-center p-4 border border-sky-100 rounded-lg hover:bg-sky-50 transition-colors"
           >
-            <UsersIcon className="w-8 h-8 text-purple-600" />
-            <span className="mt-2 text-sm font-medium text-gray-900">Clientes</span>
+            <UsersIcon className="w-8 h-8 text-sky-600" />
+            <span className="mt-2 text-sm font-medium text-slate-800">Clientes</span>
           </Link>
           <Link
             to={ROUTES.ADMIN_REPORTS}
-            className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex flex-col items-center p-4 border border-sky-100 rounded-lg hover:bg-sky-50 transition-colors"
           >
-            <ChartIcon className="w-8 h-8 text-orange-600" />
-            <span className="mt-2 text-sm font-medium text-gray-900">Reportes</span>
+            <ChartIcon className="w-8 h-8 text-sky-600" />
+            <span className="mt-2 text-sm font-medium text-slate-800">Reportes</span>
           </Link>
         </div>
       </Card>

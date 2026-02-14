@@ -163,7 +163,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
         ¿Ya tienes cuenta?{' '}
         <Link
           to={ROUTES.LOGIN}
-          className="text-blue-600 hover:text-blue-700 font-medium"
+          className="text-sky-600 hover:text-sky-700 font-medium"
         >
           Inicia sesión
         </Link>

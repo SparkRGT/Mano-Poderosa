@@ -22,28 +22,28 @@ export function CustomerLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-sky-50/50">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-200">
+      <header className="sticky top-0 z-10 bg-white border-b border-sky-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <span className="text-xl font-bold text-gray-900">{APP_NAME}</span>
+            <span className="text-xl font-bold text-sky-700">{APP_NAME}</span>
 
             {/* User menu */}
             <div className="flex items-center gap-3">
               <div className="hidden sm:block text-right">
-                <p className="text-sm font-medium text-gray-900">{profile?.name}</p>
-                <p className="text-xs text-gray-500">{profile?.email}</p>
+                <p className="text-sm font-medium text-slate-800">{profile?.name}</p>
+                <p className="text-xs text-slate-500">{profile?.email}</p>
               </div>
-              <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-sky-500 flex items-center justify-center">
                 <span className="text-sm font-medium text-white">
                   {profile ? getInitials(profile.name) : '?'}
                 </span>
               </div>
               <button
                 onClick={handleSignOut}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+                className="p-2 text-slate-600 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors"
                 title="Cerrar sesión"
               >
                 <LogoutIcon className="w-5 h-5" />
@@ -64,8 +64,8 @@ export function CustomerLayout() {
                   cn(
                     'flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
                     isActive
-                      ? 'border-blue-600 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-sky-500 text-sky-600'
+                      : 'border-transparent text-slate-500 hover:text-sky-600 hover:border-sky-200'
                   )
                 }
               >

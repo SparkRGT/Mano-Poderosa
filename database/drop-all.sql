@@ -20,6 +20,50 @@ DROP VIEW IF EXISTS public.customer_debt_summary;
 DROP VIEW IF EXISTS public.low_stock_products;
 DROP VIEW IF EXISTS public.sales_with_customer;
 
+-- Eliminar TODAS las políticas RLS
+DROP POLICY IF EXISTS "Admin can view all users" ON public.users;
+DROP POLICY IF EXISTS "Users can view own profile" ON public.users;
+DROP POLICY IF EXISTS "Admin can update all users" ON public.users;
+DROP POLICY IF EXISTS "Users can update own profile" ON public.users;
+DROP POLICY IF EXISTS "Admin can delete users" ON public.users;
+DROP POLICY IF EXISTS "Users can insert own profile" ON public.users;
+
+DROP POLICY IF EXISTS "Anyone can view categories" ON public.categories;
+DROP POLICY IF EXISTS "Admin can create categories" ON public.categories;
+DROP POLICY IF EXISTS "Admin can update categories" ON public.categories;
+DROP POLICY IF EXISTS "Admin can delete categories" ON public.categories;
+
+DROP POLICY IF EXISTS "Anyone can view active products" ON public.products;
+DROP POLICY IF EXISTS "Admin can create products" ON public.products;
+DROP POLICY IF EXISTS "Admin can update products" ON public.products;
+DROP POLICY IF EXISTS "Admin can delete products" ON public.products;
+
+DROP POLICY IF EXISTS "Admin can view all sales" ON public.sales;
+DROP POLICY IF EXISTS "Customers can view own sales" ON public.sales;
+DROP POLICY IF EXISTS "Admin can create sales" ON public.sales;
+DROP POLICY IF EXISTS "Admin can update sales" ON public.sales;
+
+DROP POLICY IF EXISTS "Admin can view all sale items" ON public.sale_items;
+DROP POLICY IF EXISTS "Customers can view own sale items" ON public.sale_items;
+DROP POLICY IF EXISTS "Admin can create sale items" ON public.sale_items;
+
+DROP POLICY IF EXISTS "Admin can view all invoices" ON public.invoices;
+DROP POLICY IF EXISTS "Customers can view own invoices" ON public.invoices;
+
+DROP POLICY IF EXISTS "Admin can view all debts" ON public.debts;
+DROP POLICY IF EXISTS "Customers can view own debts" ON public.debts;
+DROP POLICY IF EXISTS "Admin can create debts" ON public.debts;
+DROP POLICY IF EXISTS "Admin can update debts" ON public.debts;
+
+DROP POLICY IF EXISTS "Admin can view all payment requests" ON public.payment_requests;
+DROP POLICY IF EXISTS "Customers can view own payment requests" ON public.payment_requests;
+DROP POLICY IF EXISTS "Customers can create payment requests" ON public.payment_requests;
+DROP POLICY IF EXISTS "Admin can update payment requests" ON public.payment_requests;
+
+DROP POLICY IF EXISTS "Admin can view settings" ON public.settings;
+DROP POLICY IF EXISTS "Admin can update settings" ON public.settings;
+DROP POLICY IF EXISTS "Admin can create settings" ON public.settings;
+
 -- Eliminar funciones
 DROP FUNCTION IF EXISTS public.handle_new_user();
 DROP FUNCTION IF EXISTS public.is_admin();
@@ -28,6 +72,7 @@ DROP FUNCTION IF EXISTS public.generate_invoice_number();
 DROP FUNCTION IF EXISTS public.create_debt_for_pending_sale();
 DROP FUNCTION IF EXISTS public.decrease_product_stock();
 DROP FUNCTION IF EXISTS public.create_invoice_for_sale();
+DROP FUNCTION IF EXISTS public.create_test_user(text,text,text,text,user_role);
 
 -- Eliminar tablas (en orden por dependencias)
 DROP TABLE IF EXISTS public.payment_requests;

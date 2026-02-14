@@ -89,7 +89,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         ¿No tienes cuenta?{' '}
         <Link
           to={ROUTES.REGISTER}
-          className="text-blue-600 hover:text-blue-700 font-medium"
+          className="text-sky-600 hover:text-sky-700 font-medium"
         >
           Regístrate
         </Link>
