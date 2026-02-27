@@ -83,4 +83,18 @@ export const settingsService = {
 
     await Promise.all(updates);
   },
+
+  /**
+   * Inserta o actualiza una configuración
+   */
+  async upsert(key: string, value: string): Promise<Setting> {
+    const { data, error } = await supabase
+      .from('settings')
+      .upsert({ key, value }, { onConflict: 'key' })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
 };

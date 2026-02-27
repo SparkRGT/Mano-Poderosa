@@ -65,6 +65,7 @@ export const ROUTES = {
   // Admin
   ADMIN: '/admin',
   ADMIN_DASHBOARD: '/admin',
+  ADMIN_STORE_INFO: '/admin/informacion-tienda',
   ADMIN_PRODUCTS: '/admin/productos',
   ADMIN_CATEGORIES: '/admin/categorias',
   ADMIN_SALES: '/admin/ventas',

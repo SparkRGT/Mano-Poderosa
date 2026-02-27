@@ -1,4 +1,5 @@
 export { DashboardPage } from './DashboardPage';
+export { StoreInfoPage } from './StoreInfoPage';
 export { ProductsPage } from './ProductsPage';
 export { CategoriesPage } from './CategoriesPage';
 export { SalesPage } from './SalesPage';

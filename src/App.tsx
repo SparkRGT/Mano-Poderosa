@@ -10,6 +10,7 @@ import { LoginPage, RegisterPage, NotFoundPage } from './pages/public';
 // Admin Pages
 import {
   DashboardPage,
+  StoreInfoPage,
   ProductsPage,
   CategoriesPage,
   SalesPage,
@@ -52,6 +53,7 @@ function App() {
             }
           >
             <Route index element={<DashboardPage />} />
+            <Route path="informacion-tienda" element={<StoreInfoPage />} />
             <Route path="productos" element={<ProductsPage />} />
             <Route path="categorias" element={<CategoriesPage />} />
             <Route path="ventas" element={<SalesPage />} />
