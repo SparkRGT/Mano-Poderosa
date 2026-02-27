@@ -60,16 +60,16 @@ export function Table<T>({
   }
 
   return (
-    <div className="bg-white rounded-lg border border-sky-100 overflow-hidden">
+    <div className="bg-white rounded-lg border border-sky-100 overflow-hidden w-full min-w-0">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-sky-100">
+        <table className="min-w-[640px] sm:min-w-full divide-y divide-sky-100">
           <thead className="bg-sky-50/70">
             <tr>
               {columns.map((column) => (
                 <th
                   key={String(column.key)}
                   className={cn(
-                    'px-6 py-3 text-left text-xs font-medium text-slate-600 uppercase tracking-wider',
+                    'px-3 sm:px-6 py-3 text-left text-xs font-medium text-slate-600 uppercase tracking-wider whitespace-nowrap',
                     column.className
                   )}
                 >
@@ -92,7 +92,7 @@ export function Table<T>({
                   <td
                     key={String(column.key)}
                     className={cn(
-                      'px-6 py-4 whitespace-nowrap text-sm text-slate-800',
+                      'px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-sm text-slate-800',
                       column.className
                     )}
                   >

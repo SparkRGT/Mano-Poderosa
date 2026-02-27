@@ -99,9 +99,9 @@ export function ReportsPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-800">Reportes</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Reportes</h1>
       </div>
 
       {error && (
@@ -111,10 +111,10 @@ export function ReportsPage() {
       )}
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-sky-100">
+      <div className="flex gap-2 border-b border-sky-100 overflow-x-auto">
         <button
           onClick={() => setActiveTab('sales')}
-          className={`px-4 py-2 font-medium border-b-2 transition-colors ${
+          className={`px-4 py-2 font-medium border-b-2 transition-colors whitespace-nowrap shrink-0 ${
             activeTab === 'sales'
               ? 'border-sky-500 text-sky-600'
               : 'border-transparent text-slate-500 hover:text-sky-600'
@@ -124,7 +124,7 @@ export function ReportsPage() {
         </button>
         <button
           onClick={() => setActiveTab('inventory')}
-          className={`px-4 py-2 font-medium border-b-2 transition-colors ${
+          className={`px-4 py-2 font-medium border-b-2 transition-colors whitespace-nowrap shrink-0 ${
             activeTab === 'inventory'
               ? 'border-sky-500 text-sky-600'
               : 'border-transparent text-slate-500 hover:text-sky-600'

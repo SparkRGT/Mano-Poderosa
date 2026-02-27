@@ -13,6 +13,7 @@ export function ProductsPage() {
   const [editingProduct, setEditingProduct] = useState<ProductWithCategory | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<ProductWithCategory | null>(null);
+  const [sortOrder, setSortOrder] = useState<'id_asc' | 'id_desc' | 'name_asc' | 'name_desc'>('id_asc');
   const [formData, setFormData] = useState({
     product_code: '',
     name: '',
@@ -130,6 +131,28 @@ export function ProductsPage() {
     return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'USD' }).format(amount);
   };
 
+  const sortedProducts = [...products].sort((a, b) => {
+    switch (sortOrder) {
+      case 'id_asc':
+        return a.id - b.id;
+      case 'id_desc':
+        return b.id - a.id;
+      case 'name_asc':
+        return a.name.localeCompare(b.name);
+      case 'name_desc':
+        return b.name.localeCompare(a.name);
+      default:
+        return 0;
+    }
+  });
+
+  const sortOptions = [
+    { value: 'id_asc', label: 'ID (Ascendente)' },
+    { value: 'id_desc', label: 'ID (Descendente)' },
+    { value: 'name_asc', label: 'Nombre (A-Z)' },
+    { value: 'name_desc', label: 'Nombre (Z-A)' },
+  ];
+
   const columns: Column<ProductWithCategory>[] = [
     { key: 'product_code', header: 'Código', className: 'w-28' },
     { key: 'name', header: 'Nombre' },
@@ -184,10 +207,22 @@ export function ProductsPage() {
   const categoryOptions = categories.map((c) => ({ value: c.id, label: c.name }));
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-800">Productos</h1>
-        <Button onClick={() => handleOpenModal()}>+ Nuevo Producto</Button>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Productos</h1>
+        <Button onClick={() => handleOpenModal()} className="w-full sm:w-auto shrink-0">+ Nuevo Producto</Button>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="flex items-center gap-2 min-w-0">
+          <label className="text-sm font-medium text-slate-700">Ordenar por:</label>
+          <Select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as typeof sortOrder)}
+            options={sortOptions}
+            className="w-full sm:w-48"
+          />
+        </div>
       </div>
 
       {error && (
@@ -197,7 +232,7 @@ export function ProductsPage() {
       )}
 
       <Table
-        data={products}
+        data={sortedProducts}
         columns={columns}
         keyExtractor={(p) => p.id}
         isLoading={isLoading}

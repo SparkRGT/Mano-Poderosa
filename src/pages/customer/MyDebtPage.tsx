@@ -74,8 +74,8 @@ export function MyDebtPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-800">Mi Deuda</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Mi Deuda</h1>
 
       {error && (
         <Alert variant="error" onClose={() => setError(null)}>
@@ -92,7 +92,7 @@ export function MyDebtPage() {
             <p className="text-sm text-slate-500 mt-1">{debts.length} deuda(s) pendiente(s)</p>
           </div>
           {getTotalDebt() > 0 && (
-            <Button onClick={() => navigate(ROUTES.CUSTOMER_PAYMENTS)}>
+            <Button onClick={() => navigate(ROUTES.CUSTOMER_PAYMENTS)} className="w-full sm:w-auto">
               Solicitar Abono
             </Button>
           )}

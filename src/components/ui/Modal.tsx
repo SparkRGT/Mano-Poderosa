@@ -42,34 +42,34 @@ export function Modal({
   if (!isOpen) return null;
 
   const sizes = {
-    sm: 'max-w-md',
-    md: 'max-w-lg',
-    lg: 'max-w-2xl',
-    xl: 'max-w-4xl',
+    sm: 'sm:max-w-md',
+    md: 'sm:max-w-lg',
+    lg: 'sm:max-w-2xl',
+    xl: 'sm:max-w-4xl',
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-400/40 transition-opacity"
         onClick={onClose}
       />
 
-      {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-4">
+      {/* Modal - responsive: full width con margen en móvil */}
+      <div className="flex min-h-full items-center justify-center p-3 sm:p-4">
         <div
           className={cn(
-            'relative w-full bg-white rounded-lg shadow-xl border border-sky-100 transform transition-all',
+            'relative w-full max-w-[calc(100vw-1.5rem)] bg-white rounded-lg shadow-xl border border-sky-100 transform transition-all',
             sizes[size]
           )}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between px-6 py-4 border-b border-sky-100">
+            <div className="flex items-center justify-between gap-4 px-4 sm:px-6 py-3 sm:py-4 border-b border-sky-100">
               {title && (
-                <h3 className="text-lg font-semibold text-slate-800">{title}</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-slate-800 truncate min-w-0">{title}</h3>
               )}
               {showCloseButton && (
                 <button
@@ -95,7 +95,7 @@ export function Modal({
           )}
 
           {/* Content */}
-          <div className="px-6 py-4">{children}</div>
+          <div className="px-4 sm:px-6 py-4 overflow-x-auto">{children}</div>
         </div>
       </div>
     </div>,

@@ -83,9 +83,9 @@ export function InvoicesPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-800">Facturas</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Facturas</h1>
       </div>
 
       {error && (
@@ -94,7 +94,7 @@ export function InvoicesPage() {
         </Alert>
       )}
 
-      <div className="max-w-md">
+      <div className="w-full max-w-md">
         <Input
           placeholder="Buscar por número, cliente o email..."
           value={searchTerm}

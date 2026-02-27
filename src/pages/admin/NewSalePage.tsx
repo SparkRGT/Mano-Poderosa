@@ -173,10 +173,10 @@ export function NewSalePage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-800">Nueva Venta</h1>
-        <Button variant="ghost" onClick={() => navigate(ROUTES.ADMIN_SALES)}>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-800 truncate">Nueva Venta</h1>
+        <Button variant="ghost" onClick={() => navigate(ROUTES.ADMIN_SALES)} className="w-full sm:w-auto">
           Cancelar
         </Button>
       </div>
@@ -199,8 +199,8 @@ export function NewSalePage() {
                   value={searchProduct}
                   onChange={(e) => setSearchProduct(e.target.value)}
                 />
-                <div className="flex gap-2">
-                  <div className="flex-1">
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="flex-1 min-w-0">
                     <Select
                       options={productOptions}
                       value={selectedProduct}
@@ -208,17 +208,19 @@ export function NewSalePage() {
                       placeholder="Seleccionar producto"
                     />
                   </div>
-                  <Input
-                    type="number"
-                    min="1"
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
-                    className="w-24"
-                    placeholder="Cant."
-                  />
-                  <Button type="button" onClick={handleAddToCart} disabled={!selectedProduct}>
-                    Agregar
-                  </Button>
+                  <div className="flex gap-2">
+                    <Input
+                      type="number"
+                      min="1"
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                      className="w-20 sm:w-24 shrink-0"
+                      placeholder="Cant."
+                    />
+                    <Button type="button" onClick={handleAddToCart} disabled={!selectedProduct} className="flex-1 sm:flex-initial">
+                      Agregar
+                    </Button>
+                  </div>
                 </div>
               </div>
             </Card>
@@ -233,15 +235,15 @@ export function NewSalePage() {
                   {cart.map((item) => (
                     <div
                       key={item.product.id}
-                      className="flex items-center justify-between p-3 bg-sky-50 rounded-lg"
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 bg-sky-50 rounded-lg"
                     >
-                      <div className="flex-1">
-                        <p className="font-medium">{item.product.name}</p>
-                        <p className="text-sm text-slate-500">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium truncate">{item.product.name}</p>
+                        <p className="text-sm text-slate-500 truncate">
                           {item.product.product_code} - {formatCurrency(item.product.price)} c/u
                         </p>
                       </div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
                         <div className="flex items-center gap-2">
                           <Button
                             type="button"
@@ -261,7 +263,7 @@ export function NewSalePage() {
                             +
                           </Button>
                         </div>
-                        <span className="w-24 text-right font-medium">
+                        <span className="w-full sm:w-24 text-right font-medium shrink-0">
                           {formatCurrency(item.subtotal)}
                         </span>
                         <Button

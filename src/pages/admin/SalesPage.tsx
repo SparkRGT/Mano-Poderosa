@@ -97,16 +97,16 @@ export function SalesPage() {
       header: 'Acciones',
       className: 'w-52',
       render: (s) => (
-        <div className="flex gap-2">
-          <Button size="sm" variant="ghost" onClick={() => handleViewDetails(s)}>
+        <div className="flex flex-wrap gap-2">
+          <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); handleViewDetails(s); }}>
             Ver Detalle
           </Button>
           <Button
             size="sm"
             variant={s.status === 'paid' ? 'secondary' : 'primary'}
-            onClick={() => handleUpdateStatus(s)}
+            onClick={(e) => { e.stopPropagation(); handleUpdateStatus(s); }}
           >
-            {s.status === 'paid' ? 'Marcar Pendiente' : 'Marcar Pagada'}
+            {s.status === 'paid' ? 'Pendiente' : 'Pagada'}
           </Button>
         </div>
       ),
@@ -114,10 +114,10 @@ export function SalesPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-800">Ventas</h1>
-        <Button onClick={() => navigate(ROUTES.ADMIN_NEW_SALE)}>+ Nueva Venta</Button>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Ventas</h1>
+        <Button onClick={() => navigate(ROUTES.ADMIN_NEW_SALE)} className="w-full sm:w-auto shrink-0">+ Nueva Venta</Button>
       </div>
 
       {error && (
@@ -141,10 +141,10 @@ export function SalesPage() {
         title={`Venta #${selectedSale?.id}`}
         size="lg"
       >
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {selectedSale && (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Card className="p-4">
                   <p className="text-sm text-slate-500">Cliente</p>
                   <p className="font-medium">{selectedSale.customer?.name}</p>
@@ -166,25 +166,25 @@ export function SalesPage() {
                 {isLoadingItems ? (
                   <p className="text-slate-500">Cargando...</p>
                 ) : (
-                  <div className="border rounded-lg overflow-hidden">
-                    <table className="min-w-full divide-y divide-sky-100">
+                  <div className="border rounded-lg overflow-x-auto">
+                    <table className="min-w-[500px] w-full divide-y divide-sky-100">
                       <thead className="bg-sky-50">
                         <tr>
-                          <th className="px-4 py-2 text-left text-xs font-medium text-slate-600">Código</th>
-                          <th className="px-4 py-2 text-left text-xs font-medium text-slate-600">Producto</th>
-                          <th className="px-4 py-2 text-right text-xs font-medium text-slate-600">Cantidad</th>
-                          <th className="px-4 py-2 text-right text-xs font-medium text-slate-600">Precio Unit.</th>
-                          <th className="px-4 py-2 text-right text-xs font-medium text-slate-600">Subtotal</th>
+                          <th className="px-3 sm:px-4 py-2 text-left text-xs font-medium text-slate-600">Código</th>
+                          <th className="px-3 sm:px-4 py-2 text-left text-xs font-medium text-slate-600">Producto</th>
+                          <th className="px-3 sm:px-4 py-2 text-right text-xs font-medium text-slate-600">Cant.</th>
+                          <th className="px-3 sm:px-4 py-2 text-right text-xs font-medium text-slate-600">P. Unit.</th>
+                          <th className="px-3 sm:px-4 py-2 text-right text-xs font-medium text-slate-600">Subtotal</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-sky-100">
                         {saleItems.map((item) => (
                           <tr key={item.id}>
-                            <td className="px-4 py-2 text-sm">{item.product_code}</td>
-                            <td className="px-4 py-2 text-sm">{item.product_name}</td>
-                            <td className="px-4 py-2 text-sm text-right">{item.quantity}</td>
-                            <td className="px-4 py-2 text-sm text-right">{formatCurrency(item.unit_price)}</td>
-                            <td className="px-4 py-2 text-sm text-right font-medium">{formatCurrency(item.subtotal)}</td>
+                            <td className="px-3 sm:px-4 py-2 text-sm">{item.product_code}</td>
+                            <td className="px-3 sm:px-4 py-2 text-sm">{item.product_name}</td>
+                            <td className="px-3 sm:px-4 py-2 text-sm text-right">{item.quantity}</td>
+                            <td className="px-3 sm:px-4 py-2 text-sm text-right">{formatCurrency(item.unit_price)}</td>
+                            <td className="px-3 sm:px-4 py-2 text-sm text-right font-medium">{formatCurrency(item.subtotal)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -201,8 +201,8 @@ export function SalesPage() {
               )}
             </div>
           )}
-          <div className="flex justify-end mt-6">
-            <Button variant="ghost" onClick={() => setSelectedSale(null)}>
+          <div className="flex justify-end mt-6 gap-2">
+            <Button variant="ghost" onClick={() => setSelectedSale(null)} className="w-full sm:w-auto">
               Cerrar
             </Button>
           </div>

@@ -122,10 +122,10 @@ export function DebtsPage() {
   const customerOptions = customers.map((c) => ({ value: c.id, label: `${c.name} (${c.email})` }));
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-800">Deudas</h1>
-        <Button onClick={handleOpenModal}>+ Nueva Deuda</Button>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Deudas</h1>
+        <Button onClick={handleOpenModal} className="w-full sm:w-auto shrink-0">+ Nueva Deuda</Button>
       </div>
 
       {error && (

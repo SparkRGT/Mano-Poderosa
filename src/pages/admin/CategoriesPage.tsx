@@ -108,10 +108,10 @@ export function CategoriesPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-800">Categorías</h1>
-        <Button onClick={() => handleOpenModal()}>+ Nueva Categoría</Button>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Categorías</h1>
+        <Button onClick={() => handleOpenModal()} className="w-full sm:w-auto shrink-0">+ Nueva Categoría</Button>
       </div>
 
       {error && (

@@ -127,9 +127,9 @@ export function PaymentRequestsPage() {
   const pendingCount = requests.filter((r) => r.status === 'pending').length;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-800">Solicitudes de Abono</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Solicitudes de Abono</h1>
         {pendingCount > 0 && (
           <Badge variant="warning" className="text-base px-3 py-1">
             {pendingCount} pendiente{pendingCount > 1 ? 's' : ''}

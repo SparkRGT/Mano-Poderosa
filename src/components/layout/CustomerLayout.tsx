@@ -25,7 +25,7 @@ export function CustomerLayout() {
     <div className="min-h-screen bg-sky-50/50">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white border-b border-sky-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <span className="text-xl font-bold text-sky-700">{APP_NAME}</span>
@@ -53,8 +53,8 @@ export function CustomerLayout() {
         </div>
 
         {/* Navigation tabs */}
-        <nav className="max-w-7xl mx-auto px-4">
-          <div className="flex gap-1 overflow-x-auto pb-px">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex gap-1 overflow-x-auto overflow-y-hidden pb-px scroll-smooth">
             {customerNavItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -78,7 +78,7 @@ export function CustomerLayout() {
       </header>
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         <Outlet />
       </main>
     </div>

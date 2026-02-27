@@ -75,8 +75,8 @@ export function MyInvoicesPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-800">Mis Facturas</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Mis Facturas</h1>
 
       {error && (
         <Alert variant="error" onClose={() => setError(null)}>

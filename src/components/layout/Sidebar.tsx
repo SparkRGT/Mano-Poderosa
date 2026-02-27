@@ -21,12 +21,19 @@ const adminNavItems = [
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  isCollapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
 }
 
-export function Sidebar({ isOpen, onClose }: SidebarProps) {
+export function Sidebar({ isOpen, onClose, isCollapsed, onCollapsedChange }: SidebarProps) {
   const { profile, signOut } = useAuth();
   const navigate = useNavigate();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [internalCollapsed, setInternalCollapsed] = useState(false);
+  const collapsed = onCollapsedChange !== undefined ? (isCollapsed ?? false) : internalCollapsed;
+  const setCollapsed = (value: boolean) => {
+    if (onCollapsedChange) onCollapsedChange(value);
+    else setInternalCollapsed(value);
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -47,21 +54,21 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       <aside
         className={cn(
           'fixed inset-y-0 left-0 z-30 flex flex-col bg-white text-slate-700 border-r border-sky-100 transition-all duration-300 shadow-sm',
-          isCollapsed ? 'w-16' : 'w-64',
+          collapsed ? 'w-16' : 'w-64',
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
         {/* Logo */}
         <div className="flex items-center justify-between h-16 px-4 border-b border-sky-100">
-          {!isCollapsed && (
-            <span className="text-xl font-bold text-sky-700">{APP_NAME}</span>
+          {!collapsed && (
+            <span className="text-xl font-bold text-sky-700 truncate">{APP_NAME}</span>
           )}
           <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={() => setCollapsed(!collapsed)}
             className="hidden lg:block p-1 rounded-lg text-slate-500 hover:bg-sky-50 hover:text-sky-600"
           >
             <svg
-              className={cn('w-5 h-5 transition-transform', isCollapsed && 'rotate-180')}
+              className={cn('w-5 h-5 transition-transform shrink-0', collapsed && 'rotate-180')}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -99,7 +106,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   }
                 >
                   <item.icon className="w-5 h-5 flex-shrink-0" />
-                  {!isCollapsed && <span>{item.label}</span>}
+                  {!collapsed && <span className="truncate">{item.label}</span>}
                 </NavLink>
               </li>
             ))}
@@ -112,14 +119,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             <div className="w-10 h-10 rounded-full bg-sky-500 flex items-center justify-center flex-shrink-0 text-white text-sm font-medium">
               {profile ? getInitials(profile.name) : '?'}
             </div>
-            {!isCollapsed && (
-              <div className="flex-1 min-w-0">
+            {!collapsed && (
+              <div className="flex-1 min-w-0 overflow-hidden">
                 <p className="text-sm font-medium truncate text-slate-800">{profile?.name}</p>
                 <p className="text-xs text-slate-500 truncate">{profile?.email}</p>
               </div>
             )}
           </div>
-          {!isCollapsed && (
+          {!collapsed && (
             <button
               onClick={handleSignOut}
               className="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2 text-sm text-slate-600 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors"

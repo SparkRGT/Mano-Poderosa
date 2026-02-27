@@ -1,0 +1,238 @@
+{
+  "name": "Stock Alert WhatsApp - Twilio",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Check Stock Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [200, 300],
+      "notes": "Ejecuta cada hora para verificar stock bajo"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.id, p.name, p.stock, c.name as category_name, s.min_stock_alert\nFROM products p\nLEFT JOIN categories c ON p.category_id = c.id\nCROSS JOIN settings s\nWHERE p.stock <= s.min_stock_alert AND p.active = true\nORDER BY p.stock ASC"
+      },
+      "id": "supabase-query",
+      "name": "Get Low Stock Products",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [420, 300],
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-check",
+              "leftValue": "={{ $json.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-has-products",
+      "name": "Has Low Stock Products?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [640, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT admin_whatsapp FROM settings LIMIT 1"
+      },
+      "id": "get-admin-phone",
+      "name": "Get Admin WhatsApp",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [860, 200],
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtener productos con stock bajo\nconst lowStockProducts = $('Get Low Stock Products').all();\nconst adminPhone = $('Get Admin WhatsApp').first().json.admin_whatsapp;\n\n// Crear mensaje formateado para WhatsApp\nlet message = '🚨 *ALERTA DE STOCK BAJO* 🚨\\n\\n';\nmessage += `📅 Fecha: ${new Date().toLocaleDateString('es-ES')}\\n`;\nmessage += `⏰ Hora: ${new Date().toLocaleTimeString('es-ES')}\\n\\n`;\nmessage += `Se encontraron *${lowStockProducts.length}* productos con stock bajo:\\n\\n`;\n\nlowStockProducts.forEach((item, index) => {\n  const product = item.json;\n  message += `${index + 1}. *${product.name}*\\n`;\n  message += `   📦 Stock: ${product.stock}\\n`;\n  message += `   📁 Categoría: ${product.category_name || 'N/A'}\\n`;\n  message += `   ⚠️ Mínimo: ${product.min_stock_alert}\\n\\n`;\n});\n\nmessage += '_Reponer inventario pronto._';\n\n// Formatear número para Twilio WhatsApp (whatsapp:+1234567890)\nlet formattedPhone = adminPhone.replace(/[^0-9+]/g, '');\nif (!formattedPhone.startsWith('+')) {\n  formattedPhone = '+' + formattedPhone;\n}\n\nreturn {\n  to: `whatsapp:${formattedPhone}`,\n  message: message,\n  productCount: lowStockProducts.length\n};"
+      },
+      "id": "format-message",
+      "name": "Format WhatsApp Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1080, 200]
+    },
+    {
+      "parameters": {
+        "from": "={{$credentials.twilioPhoneNumber}}",
+        "to": "={{ $json.to }}",
+        "message": "={{ $json.message }}"
+      },
+      "id": "send-twilio-whatsapp",
+      "name": "Send WhatsApp via Twilio",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1300, 200],
+      "credentials": {
+        "twilioApi": {
+          "id": "YOUR_TWILIO_CREDENTIAL_ID",
+          "name": "Twilio account"
+        }
+      },
+      "notes": "Envía mensaje por WhatsApp usando Twilio"
+    },
+    {
+      "parameters": {
+        "content": "## ⚙️ CONFIGURACIÓN TWILIO\n\n### 1. Crear cuenta Twilio\n- Ve a https://www.twilio.com/try-twilio\n- Regístrate (tiene crédito gratis)\n\n### 2. Activar WhatsApp Sandbox\n- Console → Messaging → Try it out → Send a WhatsApp message\n- Escanea el QR o envía el código al número de Twilio\n\n### 3. Obtener credenciales\n- Account SID: En el Dashboard\n- Auth Token: En el Dashboard\n- WhatsApp Number: whatsapp:+14155238886 (sandbox)\n\n### 4. Para producción\n- Solicita un número de WhatsApp Business\n- Requiere aprobación de Meta (~1-2 semanas)",
+        "height": 400,
+        "width": 380
+      },
+      "id": "sticky-config",
+      "name": "Configuración Twilio",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [140, 520]
+    },
+    {
+      "parameters": {
+        "content": "## 📱 TWILIO SANDBOX\n\n### Paso importante:\nAntes de recibir mensajes, debes unirte al sandbox:\n\n1. Envía este mensaje al número de Twilio:\n   `join <palabra-codigo>`\n   \n2. El número de sandbox es:\n   `+1 415 523 8886`\n\n3. Recibirás confirmación\n\n### Limitaciones del Sandbox:\n- Solo funciona con números unidos\n- Mensajes limitados por día\n- Para producción necesitas número propio",
+        "height": 340,
+        "width": 380
+      },
+      "id": "sticky-sandbox",
+      "name": "Sandbox Info",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [560, 520]
+    },
+    {
+      "parameters": {
+        "content": "## 💰 COSTOS TWILIO\n\n### Sandbox (Pruebas):\n- Gratis con crédito inicial (~$15 USD)\n\n### Producción:\n- WhatsApp Business: ~$0.005 - $0.08 por mensaje\n- Varía según país destino\n\n### Alternativa SMS:\n- Cambia el nodo Twilio a SMS\n- `to`: número sin 'whatsapp:'\n- Costo: ~$0.0075 por SMS",
+        "height": 280,
+        "width": 380
+      },
+      "id": "sticky-costs",
+      "name": "Costos",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [980, 520]
+    },
+    {
+      "parameters": {},
+      "id": "no-action",
+      "name": "No Low Stock",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [860, 400]
+    }
+  ],
+  "connections": {
+    "Check Stock Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Get Low Stock Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Low Stock Products": {
+      "main": [
+        [
+          {
+            "node": "Has Low Stock Products?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Low Stock Products?": {
+      "main": [
+        [
+          {
+            "node": "Get Admin WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Low Stock",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Admin WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Format WhatsApp Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format WhatsApp Message": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp via Twilio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "WhatsApp"
+    },
+    {
+      "name": "Twilio"
+    },
+    {
+      "name": "Stock Alert"
+    }
+  ],
+  "triggerCount": 1
+}

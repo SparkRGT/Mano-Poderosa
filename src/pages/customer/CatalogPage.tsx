@@ -54,8 +54,8 @@ export function CatalogPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-800">Catálogo de Productos</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Catálogo de Productos</h1>
 
       {/* Filtros */}
       <div className="flex flex-col sm:flex-row gap-4">
@@ -110,7 +110,7 @@ export function CatalogPage() {
                     {product.category?.name || 'Sin categoría'}
                   </Badge>
                 </div>
-                <div className="mt-3 flex items-center justify-between">
+                <div className="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                   <p className="text-lg font-bold text-sky-600">{formatCurrency(product.price)}</p>
                   <Badge variant={product.stock > 10 ? 'success' : product.stock > 0 ? 'warning' : 'error'}>
                     Stock: {product.stock}

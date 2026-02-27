@@ -23,7 +23,7 @@ export function Navbar({ onMenuClick, title }: NavbarProps) {
         </button>
 
         {/* Title */}
-        <h1 className="text-xl font-semibold text-slate-800 lg:ml-0">
+        <h1 className="text-base sm:text-xl font-semibold text-slate-800 lg:ml-0 truncate min-w-0 max-w-[50vw] sm:max-w-none">
           {title}
         </h1>
 
