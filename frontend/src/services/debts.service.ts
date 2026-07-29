@@ -169,6 +169,6 @@ export const debtsService = {
 
     if (error) throw error;
     
-    return (data || []).reduce((sum, debt) => sum + Number(debt.remaining), 0);
+    return (data || []).reduce((sum: number, debt: Debt) => sum + Number(debt.remaining), 0);
   },
 };

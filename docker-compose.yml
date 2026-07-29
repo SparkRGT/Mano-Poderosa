@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-mano_poderosa}
+      POSTGRES_USER: ${POSTGRES_USER:-mano_poderosa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cambia_esta_clave}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/database/schema-simple.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-mano_poderosa}:${POSTGRES_PASSWORD:-cambia_esta_clave}@db:5432/${POSTGRES_DB:-mano_poderosa}
+      CORS_ORIGIN: http://localhost:5173
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_PROXY_TARGET: http://backend:3000
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

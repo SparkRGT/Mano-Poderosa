@@ -17,7 +17,7 @@ export const salesService = {
 
     if (error) throw error;
     
-    return (data || []).map(sale => ({
+    return (data || []).map((sale: any) => ({
       ...sale,
       invoice_number: sale.invoice?.[0]?.invoice_number || sale.invoice?.invoice_number,
     }));
@@ -150,6 +150,6 @@ export const salesService = {
 
     if (error) throw error;
     
-    return (data || []).reduce((sum, sale) => sum + Number(sale.total), 0);
+    return (data || []).reduce((sum: number, sale: Sale) => sum + Number(sale.total), 0);
   },
 };
