@@ -46,7 +46,7 @@ export const reportsService = {
     // Agrupar por período
     const grouped = new Map<string, { total_sales: number; total_amount: number }>();
 
-    sales.forEach(sale => {
+    sales.forEach((sale: any) => {
       const date = new Date(sale.created_at);
       let key: string;
 
@@ -94,7 +94,7 @@ export const reportsService = {
     if (salesError) throw salesError;
     if (!sales || sales.length === 0) return [];
 
-    const saleIds = sales.map(s => s.id);
+    const saleIds = sales.map((s: any) => s.id);
 
     const { data: items, error: itemsError } = await supabase
       .from('sale_items')
@@ -107,7 +107,7 @@ export const reportsService = {
     // Agrupar por producto
     const productMap = new Map<number, TopProductData>();
 
-    items.forEach(item => {
+    items.forEach((item: any) => {
       const existing = productMap.get(item.product_id) || {
         product_id: item.product_id,
         product_name: item.product_name,
@@ -147,7 +147,7 @@ export const reportsService = {
     if (error) throw error;
     if (!data) return [];
 
-    return data.map(product => ({
+    return data.map((product: any) => ({
       id: product.id,
       product_code: product.product_code,
       name: product.name,
@@ -209,9 +209,9 @@ export const reportsService = {
 
     return {
       totalSalesToday: todaySales.length,
-      totalAmountToday: todaySales.reduce((sum, s) => sum + Number(s.total), 0),
+      totalAmountToday: todaySales.reduce((sum: number, s: any) => sum + Number(s.total), 0),
       totalSalesMonth: monthSales.length,
-      totalAmountMonth: monthSales.reduce((sum, s) => sum + Number(s.total), 0),
+      totalAmountMonth: monthSales.reduce((sum: number, s: any) => sum + Number(s.total), 0),
       lowStockCount: lowStockCount || 0,
       pendingPaymentRequests: pendingRequests || 0,
     };

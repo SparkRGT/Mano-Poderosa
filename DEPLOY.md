@@ -17,8 +17,8 @@
 
 ### 1.2 Ejecutar el esquema de base de datos
 1. Ve a **SQL Editor** en Supabase
-2. Ejecuta primero `database/drop-all.sql` (si existe data previa)
-3. Ejecuta `database/schema-simple.sql`
+2. Ejecuta primero `backend/database/drop-all.sql` (si existe data previa)
+3. Ejecuta `backend/database/schema-simple.sql`
 
 ### 1.3 Obtener credenciales
 - **VITE_SUPABASE_URL**: Settings → API → Project URL
@@ -179,10 +179,11 @@ Verifica que Supabase tenga tu dominio de Render en la lista permitida.
 
 ```
 ├── dist/                 # Build de producción (generado)
-├── src/                  # Código fuente
-├── database/             # Scripts SQL
-├── server.js             # Servidor Express para producción
-├── package.json          # Dependencias y scripts
+├── frontend/             # Aplicación React/Vite
+├── backend/              # API Express
+│   ├── database/         # Scripts SQL
+│   └── server.js         # Servidor Express
+├── docker-compose.yml    # Servicios locales
 ├── vite.config.ts        # Configuración de Vite
 └── .env                  # Variables de entorno (no commitear)
 ```
