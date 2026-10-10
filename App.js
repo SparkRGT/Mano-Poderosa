@@ -15,6 +15,18 @@ export default function App() {
   const [ usuarioAutenticado, setUsuarioAutenticado ] = useState(false);
   const [ pantallaActual, setPantallaActual ] = useState('inicio');
   const [ carrito, setCarrito ] = useState([]);
+  const [ perfil, setPerfil ] = useState({
+    nombre: '',
+    correo: '',
+    telefono: '',
+    direccion: '',
+    cedula: '',
+    imagen: null,
+  });
+
+  const actualizarPerfil = (campo, valor) => {
+    setPerfil((actual) => ({ ...actual, [campo]: valor }));
+  };
 
   const agregarAlCarrito = (producto) => {
     const existente = carrito.find((item) => item.id === producto.id);
@@ -85,12 +97,18 @@ export default function App() {
         titulo="Carrito"
         subtitulo="Productos seleccionados"
         carrito={carrito}
+        perfil={perfil}
         onCambiarCantidad={cambiarCantidad}
       />
     );
   }
   else {
-    pantalla = <InicioScreen titulo="Bienvenido" subtitulo="Sistema de pedidos Online" />;
+    pantalla = (
+      <InicioScreen
+        perfil={perfil}
+        onChangePerfil={actualizarPerfil}
+      />
+    );
   }
   
 

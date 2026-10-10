@@ -1,25 +1,48 @@
-import { View, Text, StyleSheet, Image, TextInput, Alert, Pressable } from 'react-native';
 import { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TextInput,
+  Alert,
+  Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import * as imagePeacker from 'expo-image-picker';
-import Titulo from '../components/Titulo'
 
-export default function InicioScreen({titulo, subtitulo}) {
-  const [nombre, setNombre] = useState('');
-  const [correo, setCorreo] = useState('');
-  const [telefono, setTelefono] = useState('');
-  const [direccion, setDireccion] = useState('');
-  const [cedula, setCedula] = useState('');
-  const [imagen, setImagen] = useState(null);
+function Campo({ etiqueta, id, foco, onFoco, ...props }) {
+  return (
+    <View style={styles.campo}>
+      <Text style={styles.etiqueta}>{etiqueta}</Text>
+      <TextInput
+        {...props}
+        style={[
+          styles.input,
+          props.multiline && styles.inputMultilinea,
+          foco === id && styles.inputActivo,
+        ]}
+        placeholderTextColor="#666"
+        onFocus={() => onFoco(id)}
+        onBlur={() => onFoco(null)}
+      />
+    </View>
+  );
+}
+
+export default function InicioScreen({ perfil, onChangePerfil }) {
+  const [foco, setFoco] = useState(null);
+  const inicial = perfil.nombre?.trim()?.charAt(0)?.toUpperCase() || 'MP';
 
   const seleccionarImagen = async () => {
     try {
       const permiso = await imagePeacker.requestMediaLibraryPermissionsAsync();
-      // en caso de que el usuario no conceda el permiso 
       if (!permiso.granted) {
         Alert.alert(
-          'se requiere del permiso del usuario ',
-          'para acceder a la galeria de imagenes'
-
+          'Permiso necesario',
+          'Autoriza el acceso a la galería para elegir una foto.'
         );
         return;
       }
@@ -30,11 +53,11 @@ export default function InicioScreen({titulo, subtitulo}) {
       });
 
       if (!resultado.canceled && resultado.assets?.length) {
-        setImagen(resultado.assets[0].uri);
+        onChangePerfil('imagen', resultado.assets[0].uri);
       }
     } catch (error) {
-        console.log('Error al seleccionar la imagen:', error);
-        Alert.alert('Error', 'No se pudo seleccionar la imagen');
+      console.log('Error al seleccionar la imagen:', error);
+      Alert.alert('Error', 'No se pudo seleccionar la imagen');
     }
   };
 
@@ -43,8 +66,8 @@ export default function InicioScreen({titulo, subtitulo}) {
       const permiso = await imagePeacker.requestCameraPermissionsAsync();
       if (!permiso.granted) {
         Alert.alert(
-          'se requiere del permiso del usuario ',
-          'para acceder a la camara de imagenes'
+          'Permiso necesario',
+          'Autoriza el acceso a la cámara para tomar una foto.'
         );
         return;
       }
@@ -53,7 +76,7 @@ export default function InicioScreen({titulo, subtitulo}) {
         quality: 0.8,
       });
       if (!resultado.canceled && resultado.assets?.length) {
-        setImagen(resultado.assets[0].uri);
+        onChangePerfil('imagen', resultado.assets[0].uri);
       }
     } catch (error) {
       console.log('Error al tomar la foto:', error);
@@ -62,102 +85,232 @@ export default function InicioScreen({titulo, subtitulo}) {
   };
 
   return (
-    <View style={styles.container}>
-      <Titulo 
-        text="nuevo perfil"
-        subtitulo="ingrese sus datos"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre"
-        value={nombre}
-        onChangeText={setNombre}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Correo"
-        value={correo}
-        onChangeText={setCorreo}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Teléfono"
-        value={telefono}
-        onChangeText={setTelefono}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Dirección"
-        value={direccion}
-        onChangeText={setDireccion}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Cédula"
-        value={cedula}
-        onChangeText={setCedula}
-      />
-      <Pressable style={styles.boton} onPress={seleccionarImagen}>
-        <Text style={styles.textBoton}>Seleccionar Imagen</Text>
-      </Pressable>
-      <Pressable style={styles.boton} onPress={toamrFoto}>
-        <Text style={styles.textBoton}>Tomar Foto</Text>
-      </Pressable>
-      {imagen && (
-        <View>
-          <Text>imagen selecionada </Text>
-          <Image source={{ uri: imagen }} style={styles.imagen} />
+    <KeyboardAvoidingView
+      style={styles.flex}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <ScrollView
+        style={styles.flex}
+        contentContainerStyle={styles.contenido}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.marca}>Mano Poderosa</Text>
+        <Text style={styles.titulo}>Tu perfil</Text>
+        <Text style={styles.subtitulo}>
+          El nombre, el teléfono y la dirección se incluyen al compartir el pedido por WhatsApp.
+        </Text>
+
+        <View style={styles.tarjeta}>
+          <View style={styles.fotoFila}>
+            <View style={styles.avatar}>
+              {perfil.imagen ? (
+                <Image source={{ uri: perfil.imagen }} style={styles.avatarImagen} />
+              ) : (
+                <Text style={styles.avatarTexto}>{inicial}</Text>
+              )}
+            </View>
+            <View style={styles.fotoTexto}>
+              <Text style={styles.fotoTitulo}>Foto de perfil</Text>
+              <Text style={styles.fotoAyuda}>Opcional. Sirve para identificarte.</Text>
+              <View style={styles.fotoBotones}>
+                <Pressable
+                  style={({ pressed }) => [styles.botonFoto, pressed && styles.presionado]}
+                  onPress={seleccionarImagen}
+                  accessibilityLabel="Elegir foto de la galería"
+                >
+                  <Text style={styles.botonFotoTexto}>Galería</Text>
+                </Pressable>
+                <Pressable
+                  style={({ pressed }) => [styles.botonFoto, pressed && styles.presionado]}
+                  onPress={toamrFoto}
+                  accessibilityLabel="Tomar foto con la cámara"
+                >
+                  <Text style={styles.botonFotoTexto}>Cámara</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+
+          <Campo
+            id="nombre"
+            foco={foco}
+            onFoco={setFoco}
+            etiqueta="Nombre"
+            placeholder="María Pérez"
+            value={perfil.nombre}
+            onChangeText={(valor) => onChangePerfil('nombre', valor)}
+            autoCapitalize="words"
+          />
+          <Campo
+            id="correo"
+            foco={foco}
+            onFoco={setFoco}
+            etiqueta="Correo"
+            placeholder="correo@ejemplo.com"
+            value={perfil.correo}
+            onChangeText={(valor) => onChangePerfil('correo', valor)}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            autoComplete="email"
+          />
+          <Campo
+            id="telefono"
+            foco={foco}
+            onFoco={setFoco}
+            etiqueta="Teléfono"
+            placeholder="0991234567"
+            value={perfil.telefono}
+            onChangeText={(valor) => onChangePerfil('telefono', valor)}
+            keyboardType="phone-pad"
+          />
+          <Campo
+            id="cedula"
+            foco={foco}
+            onFoco={setFoco}
+            etiqueta="Cédula"
+            placeholder="0102030405"
+            value={perfil.cedula}
+            onChangeText={(valor) => onChangePerfil('cedula', valor)}
+            keyboardType="number-pad"
+          />
         </View>
-      )}
-    </View>
-    
-  )
-};
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
+}
 
 const styles = StyleSheet.create({
-  logo : {
-    width: 200,
-    height: 200,
-    marginTop: 20,
-  },
-  container: {
+  flex: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
     width: '100%',
-    paddingBottom: 72,
+    backgroundColor: '#f5f5f5',
+  },
+  contenido: {
+    paddingTop: 56,
+    paddingHorizontal: 20,
+    paddingBottom: 108,
+  },
+  marca: {
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 0.4,
+    color: '#007AFF',
+    textTransform: 'uppercase',
+    marginBottom: 6,
+  },
+  titulo: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#161111',
+    marginBottom: 8,
+  },
+  subtitulo: {
+    fontSize: 15,
+    lineHeight: 22,
+    color: '#666',
+    marginBottom: 20,
   },
   tarjeta: {
-    width: '85%',
     backgroundColor: '#fff',
-    borderRadius: 12,
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    marginTop: 12,
-    alignItems: 'center',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
     elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
   },
-  numero: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: 'rgb(69, 34, 211)',
+  fotoFila: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
   },
-  boton: {
-    backgroundColor: 'rgb(69, 34, 211)',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    marginTop: 16,
+  avatar: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: '#E8F2FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
   },
-  textBoton: {
-    color: '#fff',
+  avatarImagen: {
+    width: 72,
+    height: 72,
+  },
+  avatarTexto: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#007AFF',
+  },
+  fotoTexto: {
+    flex: 1,
+    marginLeft: 14,
+  },
+  fotoTitulo: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '700',
+    color: '#161111',
   },
-  imagen: {
-    width: 100,
-    height: 150,
-    marginTop: 20,
+  fotoAyuda: {
+    fontSize: 13,
+    lineHeight: 18,
+    color: '#666',
+    marginTop: 2,
+  },
+  fotoBotones: {
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  botonFoto: {
+    minHeight: 44,
+    justifyContent: 'center',
+    paddingHorizontal: 14,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#007AFF',
+    marginRight: 8,
+  },
+  botonFotoTexto: {
+    color: '#007AFF',
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  presionado: {
+    opacity: 0.65,
+  },
+  campo: {
+    marginTop: 14,
+  },
+  etiqueta: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#161111',
+    marginBottom: 6,
+  },
+  input: {
+    minHeight: 48,
+    borderColor: '#e0e0e0',
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    backgroundColor: '#fafafa',
+    fontSize: 16,
+    color: '#161111',
+  },
+  inputMultilinea: {
+    minHeight: 72,
+    paddingTop: 12,
+    textAlignVertical: 'top',
+  },
+  inputActivo: {
+    borderColor: '#007AFF',
+    backgroundColor: '#fff',
   },
 });

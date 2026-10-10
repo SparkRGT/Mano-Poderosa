@@ -1,8 +1,44 @@
-import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native'
+import { useState } from 'react'
+import { View, Text, StyleSheet, FlatList, Pressable, Linking, Alert } from 'react-native'
 import Titulo from '../components/Titulo'
 
-export default function CarritoScreen({ titulo, subtitulo, carrito = [], onCambiarCantidad }) {
+function mensajePedido(carrito, perfil, total) {
+  const productos = carrito
+    .map(
+      (item) =>
+        `• ${item.nombre} x${item.cantidad} — $${(item.precio * item.cantidad).toFixed(2)}`
+    )
+    .join('\n')
+
+  const lineas = ['*Pedido — Mano Poderosa*', '']
+  if (perfil.nombre?.trim()) lineas.push(`Cliente: ${perfil.nombre.trim()}`)
+  if (perfil.telefono?.trim()) lineas.push(`Teléfono: ${perfil.telefono.trim()}`)
+  lineas.push('', '*Productos*', productos, '', `*Total: $${total.toFixed(2)}*`)
+  return lineas.join('\n')
+}
+
+export default function CarritoScreen({ titulo, subtitulo, carrito = [], perfil = {}, onCambiarCantidad }) {
+  const [compartiendo, setCompartiendo] = useState(false)
   const total = carrito.reduce((suma, item) => suma + item.precio * item.cantidad, 0)
+
+  const compartirPorWhatsApp = async () => {
+    const mensaje = mensajePedido(carrito, perfil, total)
+    const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`
+    setCompartiendo(true)
+    try {
+      const puedeAbrir = await Linking.canOpenURL(url)
+      if (!puedeAbrir) {
+        Alert.alert('WhatsApp', 'No se pudo abrir WhatsApp en este dispositivo.')
+        return
+      }
+      await Linking.openURL(url)
+    } catch (error) {
+      console.log('Error al compartir por WhatsApp:', error)
+      Alert.alert('WhatsApp', 'No se pudo compartir el pedido.')
+    } finally {
+      setCompartiendo(false)
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -40,9 +76,20 @@ export default function CarritoScreen({ titulo, subtitulo, carrito = [], onCambi
             </View>
           )}
           ListFooterComponent={
-            <View style={styles.total}>
-              <Text style={styles.totalEtiqueta}>Total</Text>
-              <Text style={styles.totalValor}>${total.toFixed(2)}</Text>
+            <View>
+              <View style={styles.total}>
+                <Text style={styles.totalEtiqueta}>Total</Text>
+                <Text style={styles.totalValor}>${total.toFixed(2)}</Text>
+              </View>
+              <Pressable
+                style={[styles.whatsapp, compartiendo && styles.whatsappDeshabilitado]}
+                onPress={compartirPorWhatsApp}
+                disabled={compartiendo}
+              >
+                <Text style={styles.whatsappTexto}>
+                  {compartiendo ? 'Abriendo WhatsApp...' : 'Compartir por WhatsApp'}
+                </Text>
+              </Pressable>
             </View>
           }
         />
@@ -139,5 +186,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#007AFF',
+  },
+  whatsapp: {
+    backgroundColor: '#25D366',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 12,
+  },
+  whatsappDeshabilitado: {
+    backgroundColor: '#8ed9a8',
+  },
+  whatsappTexto: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 16,
   },
 });
