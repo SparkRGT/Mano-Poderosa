@@ -137,7 +137,7 @@ export default function InicioScreen({ perfil, onChangePerfil }) {
             foco={foco}
             onFoco={setFoco}
             etiqueta="Nombre"
-            placeholder="María Pérez"
+            placeholder="Ingresa tu nombre"
             value={perfil.nombre}
             onChangeText={(valor) => onChangePerfil('nombre', valor)}
             autoCapitalize="words"
@@ -159,27 +159,18 @@ export default function InicioScreen({ perfil, onChangePerfil }) {
             foco={foco}
             onFoco={setFoco}
             etiqueta="Teléfono"
-            placeholder="0991234567"
+            placeholder="ingresa tu teléfono"
             value={perfil.telefono}
             onChangeText={(valor) => onChangePerfil('telefono', valor)}
             keyboardType="phone-pad"
           />
-          <Campo
-            id="direccion"
-            foco={foco}
-            onFoco={setFoco}
-            etiqueta="Dirección de entrega"
-            placeholder="Calle, número y referencia"
-            value={perfil.direccion}
-            onChangeText={(valor) => onChangePerfil('direccion', valor)}
-            multiline
-          />
+          
           <Campo
             id="cedula"
             foco={foco}
             onFoco={setFoco}
             etiqueta="Cédula"
-            placeholder="0102030405"
+            placeholder="ingresa tu cédula"
             value={perfil.cedula}
             onChangeText={(valor) => onChangePerfil('cedula', valor)}
             keyboardType="number-pad"

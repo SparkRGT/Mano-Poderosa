@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native'
 import Titulo from '../components/Titulo'
 const productos = [
-  { id: '1', nombre: 'Queso', precio: 3.25, stock: 20 },
+  { id: '1', nombre: 'Queso x lb', precio: 3.25, stock: 20 },
   { id: '2', nombre: 'fideos', precio: 0.45, stock: 15 },
   { id: '3', nombre: 'cola 1ltr', precio: 1.2, stock: 8 },
   { id: '4', nombre: 'Jugo delvalle', precio: 1.35, stock: 12 },
