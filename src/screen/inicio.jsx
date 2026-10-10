@@ -165,6 +165,16 @@ export default function InicioScreen({ perfil, onChangePerfil }) {
             keyboardType="phone-pad"
           />
           <Campo
+            id="direccion"
+            foco={foco}
+            onFoco={setFoco}
+            etiqueta="Dirección de entrega"
+            placeholder="Calle, número y referencia"
+            value={perfil.direccion}
+            onChangeText={(valor) => onChangePerfil('direccion', valor)}
+            multiline
+          />
+          <Campo
             id="cedula"
             foco={foco}
             onFoco={setFoco}
@@ -187,7 +197,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   contenido: {
-    paddingTop: 56,
+    width: '100%',
+    maxWidth: 560,
+    alignSelf: 'center',
+    paddingTop: 48,
     paddingHorizontal: 20,
     paddingBottom: 108,
   },
@@ -209,14 +222,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
     color: '#666',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   tarjeta: {
     backgroundColor: '#fff',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 8,
+    paddingBottom: 20,
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -226,8 +239,8 @@ const styles = StyleSheet.create({
   fotoFila: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
-    paddingBottom: 16,
+    marginBottom: 4,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
@@ -286,7 +299,7 @@ const styles = StyleSheet.create({
     opacity: 0.65,
   },
   campo: {
-    marginTop: 14,
+    marginTop: 12,
   },
   etiqueta: {
     fontSize: 14,
@@ -305,6 +318,7 @@ const styles = StyleSheet.create({
     color: '#161111',
   },
   inputMultilinea: {
+    height: 72,
     minHeight: 72,
     paddingTop: 12,
     textAlignVertical: 'top',
