@@ -2,10 +2,13 @@ import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
 import pg from 'pg';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 const { Pool } = pg;
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
+const frontendDist = join(dirname(fileURLToPath(import.meta.url)), '..', 'frontend', 'dist');
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 // Only application tables/views can be queried through this endpoint.  Values are
@@ -110,6 +113,11 @@ app.post('/api/data/:table', async (req, res) => {
 app.get('/health', async (_req, res) => {
   try { await pool.query('SELECT 1'); res.json({ status: 'ok' }); }
   catch { res.status(503).json({ status: 'database_unavailable' }); }
+});
+
+app.use(express.static(frontendDist));
+app.get('*', (_req, res) => {
+  res.sendFile(join(frontendDist, 'index.html'));
 });
 
 app.listen(PORT, () => console.log(`API running on port ${PORT}`));

@@ -8,7 +8,7 @@ export default defineConfig({
     outDir: "dist",
     emptyOutDir: true,
   },
-  base: "./", // Esto es clave para que las rutas sean relativas
+  base: "/",
   server: {
     host: true,
     port: 5173,
