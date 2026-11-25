@@ -4,7 +4,7 @@ import { View, Text, TextInput, Pressable, Alert, StyleSheet } from 'react-nativ
 
 export default function LoginScreen({onLogin}) {
     const [correo, setCorreo ] = useState('');
-    const [clave, setClave ] = useState('');
+    const [clave, setClave ] = useState('');    
 
     //credenciales de prueba sin BD
     const correoCorrecto = 'spark@cliente.com';
@@ -18,7 +18,7 @@ export default function LoginScreen({onLogin}) {
             );
             return;
         }
-        if (correo === correoCorrecto && clave === claveCorrecta) {
+        if (correo.trim().toLowerCase() === correoCorrecto && clave === claveCorrecta) {
             onLogin();
         } else {
             Alert.alert(
@@ -45,6 +45,8 @@ export default function LoginScreen({onLogin}) {
                     value={correo}
                     onChangeText={setCorreo}
                     autoCapitalize="none"
+                    keyboardType="email-address"
+                    autoCorrect={false}
                 />
                 <TextInput 
                     style={styles.input}

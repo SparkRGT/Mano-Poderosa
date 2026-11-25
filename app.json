@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Mano Poderosa",
-    "slug": "mano-poderosa",
+    "name": "APP-Movil-1",
+    "slug": "APP-Movil-1",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,16 +10,31 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.spaekrgt.appmovil1",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
-      },
-      "predictiveBackGestureEnabled": false
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-notifications",
+      "expo-sqlite",
+      "expo-status-bar"
+    ],
+    "experiments": {
+      "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "bb4afda7-c51f-44ab-8b0b-849011186efb"
+      }
+    },
+    "owner": "spaekrgt"
   }
 }

@@ -1,126 +1,64 @@
-import { StatusBar } from 'expo-status-bar';
-import { Alert } from 'react-native';
 import { useState } from 'react';
-
-//importar las screens construidas
+import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import LoginScreen from './src/screen/loginScreen';
-import InicioScreen from './src/screen/inicio';
-import CarritoScreen from './src/screen/carritoScreen';
+import InicioScreen from './src/screen/InicioScreen';
 import CatalogoScreen from './src/screen/catalogoScreen';
-import MenuInferior from './src/components/menuAbajo';
-
-
+import CarritoScreen from './src/screen/carritoScreen';
+import Sensores from './src/components/sensores';
+import MenuInferior from './src/components/menuInferior';
+import NotificacionesPush from './src/screen/NotificacionesPush';
+import SolicitudesScreen from './src/screen/SolicitudesScreen';
 
 export default function App() {
-  const [ usuarioAutenticado, setUsuarioAutenticado ] = useState(false);
-  const [ pantallaActual, setPantallaActual ] = useState('inicio');
-  const [ carrito, setCarrito ] = useState([]);
-  const [ perfil, setPerfil ] = useState({
-    nombre: '',
-    correo: '',
-    telefono: '',
-    direccion: '',
-    cedula: '',
-    imagen: null,
-  });
+  const [sesionIniciada, setSesionIniciada] = useState(false);
+  const [pantallaActual, setPantallaActual] = useState('inicio');
+  const [carrito, setCarrito] = useState([]);
 
-  const actualizarPerfil = (campo, valor) => {
-    setPerfil((actual) => ({ ...actual, [campo]: valor }));
-  };
-
-  const agregarAlCarrito = (producto) => {
-    const existente = carrito.find((item) => item.id === producto.id);
-    if (existente && existente.cantidad >= producto.stock) {
-      Alert.alert('Sin stock', 'No hay más unidades disponibles de este producto');
-      return;
-    }
-
+  const agregarProducto = (producto) => {
     setCarrito((actual) => {
-      const yaEsta = actual.find((item) => item.id === producto.id);
-      if (yaEsta) {
-        return actual.map((item) =>
-          item.id === producto.id
-            ? { ...item, cantidad: item.cantidad + 1 }
-            : item
-        );
-      }
-      return [...actual, { ...producto, cantidad: 1 }];
+      const existente = actual.find((item) => item.id === producto.id);
+      if ((existente?.cantidad ?? 0) >= producto.stock) return actual;
+      return existente
+        ? actual.map((item) => item.id === producto.id ? { ...item, cantidad: item.cantidad + 1 } : item)
+        : [...actual, { ...producto, cantidad: 1 }];
     });
   };
 
-  const cambiarCantidad = (id, delta) => {
-    const item = carrito.find((producto) => producto.id === id);
-    if (!item) {
-      return;
-    }
-    if (delta > 0 && item.cantidad >= item.stock) {
-      Alert.alert('no hay mas unidades de este producto');
-      return;
-    }
-
-    setCarrito((actual) =>
-      actual
-        .map((producto) =>
-          producto.id === id
-            ? { ...producto, cantidad: producto.cantidad + delta }
-            : producto
-        )
-        .filter((producto) => producto.cantidad > 0)
-    );
+  const cambiarCantidad = (id, cambio) => {
+    setCarrito((actual) => actual.map((item) => item.id === id
+      ? { ...item, cantidad: Math.min(item.stock, item.cantidad + cambio) }
+      : item).filter((item) => item.cantidad > 0));
   };
 
-  //si no ha iniciado sesion, muestre el login
-  if (!usuarioAutenticado) {
-    return (
-      <>
-        <LoginScreen onLogin={() => setUsuarioAutenticado(true)} />
-      </>
-    )
-  }
-
-  //determinar qué pantalla debe mostrar la app
-
-  let pantalla;
-  if (pantallaActual === 'solicitudes' || pantallaActual === 'catalogo') {
-    pantalla = (
-      <CatalogoScreen
-        titulo="Catálogo"
-        subtitulo="Productos disponibles"
-        carrito={carrito}
-        onAgregar={agregarAlCarrito}
-      />
-    );
-  }
-  else if (pantallaActual === 'carrito' || pantallaActual === 'perfil') {
-    pantalla = (
-      <CarritoScreen
-        titulo="Carrito"
-        subtitulo="Productos seleccionados"
-        carrito={carrito}
-        perfil={perfil}
-        onCambiarCantidad={cambiarCantidad}
-      />
-    );
-  }
-  else {
-    pantalla = (
-      <InicioScreen
-        perfil={perfil}
-        onChangePerfil={actualizarPerfil}
-      />
-    );
-  }
-  
-
   return (
-    <>
-      {pantalla}
-      <MenuInferior
-        pantallaActual={pantallaActual}
-        setPantallaActual={setPantallaActual}
-        cantidadCarrito={carrito.reduce((total, item) => total + item.cantidad, 0)}
-      />
-      <StatusBar style="auto" />
-    </>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="dark" />
+      <KeyboardAvoidingView style={styles.contenido} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        {!sesionIniciada ? <LoginScreen onLogin={() => setSesionIniciada(true)} /> : (
+          <>
+            <View style={[styles.contenido, pantallaActual !== 'inicio' && styles.oculta]}>
+              <InicioScreen titulo="Nuevo perfil" subtitulo="Ingrese sus datos" />
+            </View>
+            {pantallaActual === 'catalogo' && <CatalogoScreen titulo="Catálogo" subtitulo="Selecciona tus productos" carrito={carrito} onAgregar={agregarProducto} />}
+            {pantallaActual === 'carrito' && <CarritoScreen titulo="Mi carrito" subtitulo="Revisa tus productos" carrito={carrito} onCambiarCantidad={cambiarCantidad} />}
+            <View style={[styles.contenido, pantallaActual !== 'sensores' && styles.oculta]}>
+              <Sensores activo={pantallaActual === 'sensores'} />
+            </View>
+            <View style={[styles.contenido, pantallaActual !== 'notificaciones' && styles.oculta]}>
+              <NotificacionesPush />
+            </View>
+            {pantallaActual === 'solicitudes' && <SolicitudesScreen />}
+            <MenuInferior pantallaActual={pantallaActual} setPantallaActual={setPantallaActual} cantidadCarrito={carrito.reduce((total, item) => total + item.cantidad, 0)} />
+          </>
+        )}
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#f5f5f5', paddingTop: Platform.OS === 'android' ? 32 : 0, paddingBottom: Platform.OS === 'android' ? 24 : 0 },
+  contenido: { flex: 1 },
+  oculta: { display: 'none' },
+});

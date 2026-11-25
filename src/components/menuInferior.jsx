@@ -33,16 +33,21 @@ export default function MenuInferior({ pantallaActual, setPantallaActual, cantid
                     {cantidadCarrito > 0 ? `Carrito (${cantidadCarrito})` : 'Carrito'}
                 </Text>
             </Pressable>
+            <Pressable style={styles.opcion} onPress={() => setPantallaActual('sensores')}>
+                <Text style={pantallaActual === 'sensores' ? styles.activo : styles.texto}>Sensores</Text>
+            </Pressable>
+            <Pressable style={styles.opcion} onPress={() => setPantallaActual('notificaciones')}>
+                <Text style={pantallaActual === 'notificaciones' ? styles.activo : styles.texto}>Avisos</Text>
+            </Pressable>
+            <Pressable style={styles.opcion} onPress={() => setPantallaActual('solicitudes')}>
+                <Text style={pantallaActual === 'solicitudes' ? styles.activo : styles.texto}>Solicitudes</Text>
+            </Pressable>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     barraMenu: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 0,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
@@ -55,17 +60,21 @@ const styles = StyleSheet.create({
     },
     opcion: {
         paddingVertical: 8,
-        paddingHorizontal: 16,
+        paddingHorizontal: 4,
+        flex: 1,
+        alignItems: 'center',
         borderRadius: 20,
     },
     activo: {
         color: '#007bff',
         fontWeight: 'bold',
-        fontSize: 14
+        fontSize: 11,
+        textAlign: 'center'
     },
     texto: {
         color: '#666',
         fontWeight: 'bold',
-        fontSize: 14,
+        fontSize: 11,
+        textAlign: 'center'
     }
 })

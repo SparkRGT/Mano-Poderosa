@@ -1,42 +1,41 @@
+import { View, Text, StyleSheet, FlatList, Pressable, Alert } from 'react-native'
 import { useState } from 'react'
-import { View, Text, StyleSheet, FlatList, Pressable, Linking, Alert } from 'react-native'
 import Titulo from '../components/Titulo'
+import { notificarSolicitudRegistrada, solicitarPermisos } from '../services/notificaciones'
 
-function mensajePedido(carrito, perfil, total) {
-  const productos = carrito
-    .map(
-      (item) =>
-        `• ${item.nombre} x${item.cantidad} — $${(item.precio * item.cantidad).toFixed(2)}`
-    )
-    .join('\n')
-
-  const lineas = ['*Pedido — Mano Poderosa*', '']
-  if (perfil.nombre?.trim()) lineas.push(`Cliente: ${perfil.nombre.trim()}`)
-  if (perfil.telefono?.trim()) lineas.push(`Teléfono: ${perfil.telefono.trim()}`)
-  lineas.push('', '*Productos*', productos, '', `*Total: $${total.toFixed(2)}*`)
-  return lineas.join('\n')
-}
-
-export default function CarritoScreen({ titulo, subtitulo, carrito = [], perfil = {}, onCambiarCantidad }) {
-  const [compartiendo, setCompartiendo] = useState(false)
+export default function CarritoScreen({ titulo, subtitulo, carrito = [], onCambiarCantidad }) {
+  const [confirmando, setConfirmando] = useState(false)
   const total = carrito.reduce((suma, item) => suma + item.precio * item.cantidad, 0)
 
-  const compartirPorWhatsApp = async () => {
-    const mensaje = mensajePedido(carrito, perfil, total)
-    const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`
-    setCompartiendo(true)
+  /**
+   * Simula el guardado de un pedido y dispara la notificación local
+   * SOLO después de recibir confirmación de éxito (sección 11 de la guía).
+   */
+  async function confirmarPedido() {
+    if (carrito.length === 0) {
+      Alert.alert('Carrito vacío', 'Agrega productos antes de confirmar.')
+      return
+    }
+    setConfirmando(true)
     try {
-      const puedeAbrir = await Linking.canOpenURL(url)
-      if (!puedeAbrir) {
-        Alert.alert('WhatsApp', 'No se pudo abrir WhatsApp en este dispositivo.')
-        return
+      // Solicitar permisos si aún no se han otorgado.
+      await solicitarPermisos()
+
+      // --- Simula la llamada al servidor ---
+      // En producción reemplaza este bloque por: await api.post('/pedidos', { carrito })
+      await new Promise((resolve) => setTimeout(resolve, 800))
+      const exitoso = true // resultado simulado del servidor
+      // ------------------------------------
+
+      if (exitoso) {
+        // La notificación se dispara SOLO tras la confirmación de éxito del servidor.
+        await notificarSolicitudRegistrada()
+        Alert.alert('Pedido confirmado', 'Tu pedido fue registrado correctamente.')
       }
-      await Linking.openURL(url)
     } catch (error) {
-      console.log('Error al compartir por WhatsApp:', error)
-      Alert.alert('WhatsApp', 'No se pudo compartir el pedido.')
+      Alert.alert('Error', error.message || 'No se pudo registrar el pedido.')
     } finally {
-      setCompartiendo(false)
+      setConfirmando(false)
     }
   }
 
@@ -82,12 +81,12 @@ export default function CarritoScreen({ titulo, subtitulo, carrito = [], perfil 
                 <Text style={styles.totalValor}>${total.toFixed(2)}</Text>
               </View>
               <Pressable
-                style={[styles.whatsapp, compartiendo && styles.whatsappDeshabilitado]}
-                onPress={compartirPorWhatsApp}
-                disabled={compartiendo}
+                style={[styles.botonConfirmar, confirmando && styles.botonDeshabilitado]}
+                disabled={confirmando}
+                onPress={confirmarPedido}
               >
-                <Text style={styles.whatsappTexto}>
-                  {compartiendo ? 'Abriendo WhatsApp...' : 'Compartir por WhatsApp'}
+                <Text style={styles.textoBoton}>
+                  {confirmando ? 'Confirmando…' : 'Confirmar pedido'}
                 </Text>
               </Pressable>
             </View>
@@ -187,16 +186,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#007AFF',
   },
-  whatsapp: {
-    backgroundColor: '#25D366',
-    padding: 12,
-    borderRadius: 8,
+  botonConfirmar: {
+    backgroundColor: '#007AFF',
+    padding: 14,
+    borderRadius: 10,
     marginTop: 12,
+    marginBottom: 8,
   },
-  whatsappDeshabilitado: {
-    backgroundColor: '#8ed9a8',
+  botonDeshabilitado: {
+    backgroundColor: '#9ec7f5',
   },
-  whatsappTexto: {
+  textoBoton: {
     color: '#fff',
     fontWeight: 'bold',
     textAlign: 'center',

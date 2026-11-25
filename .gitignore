@@ -39,3 +39,9 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Credenciales de Firebase: conservar las claves privadas fuera del proyecto
+# google-services.json es seguro para incluir en el repo (no contiene claves de servidor)
+*firebase-adminsdk*.json
+*service-account*.json
+credentials.json
